@@ -1,0 +1,1 @@
+{"numero":1,"cliente":{"id":1,"codigo":"C0001","nombre":"Mario Vargas","nit":"9348166-7"},"serie":"A","total":100.55,"fecha":"Feb 6, 2018 9:58:52 PM"}
