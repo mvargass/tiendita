@@ -1,14 +1,25 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package model;
 
 /**
  *
  * @author Mario
  */
-public class Cliente {
-    private int id;
-    private String codigo;
-    private String nombre;
-    private String nit;      
+public class Cliente extends Persona {
+    
+    private String codigoCliente;
+
+    public String getCodigoCliente() {
+        return codigoCliente;
+    }
+
+    public void setCodigoCliente(String codigoCliente) {
+        this.codigoCliente = codigoCliente;
+    }
 
     public int getId() {
         return id;
@@ -16,14 +27,6 @@ public class Cliente {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
     }
 
     public String getNombre() {
@@ -40,5 +43,18 @@ public class Cliente {
 
     public void setNit(String nit) {
         this.nit = nit;
+    }
+
+    public TipoRelacion getTipoRelacion() {
+        return tipoRelacion;
+    }
+
+    public void setTipoRelacion(TipoRelacion tipoRelacion) {
+        this.tipoRelacion = tipoRelacion;
+    }
+    
+    @Override
+    public int hashCode(){
+        return this.id;
     }
 }

@@ -6,6 +6,7 @@ package model;
  */
 public class Producto {
     //Código, Nombre, Precio, Número de Existencias y Categoría
+    private int id;
     private String codigo;
     private String descripcion;
     private double precio;
@@ -42,6 +43,17 @@ public class Producto {
     public void setStock(int stock) {
         this.stock = stock;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     
-    
+    @Override
+    public int hashCode(){
+        return this.id;
+    }
 }

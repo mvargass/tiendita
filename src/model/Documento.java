@@ -56,4 +56,8 @@ public class Documento {
         this.fecha = fecha;
     }
     
+    @Override
+    public int hashCode(){
+        return this.id;
+    }
 }

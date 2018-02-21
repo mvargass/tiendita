@@ -64,5 +64,8 @@ public class Detalle {
         this.tipoTransaccion = tipoTransaccion;
     }
     
-    
+    @Override
+    public int hashCode(){
+        return this.id;
+    }
 }

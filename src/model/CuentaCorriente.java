@@ -8,7 +8,7 @@ import java.util.Date;
  */
 public class CuentaCorriente {
     private int id;
-    private Cliente cliente;
+    private Persona cliente;
     private Documento Documento;
     private double cargo;
     private double abono;
@@ -22,11 +22,11 @@ public class CuentaCorriente {
         this.id = id;
     }
 
-    public Cliente getCliente() {
+    public Persona getCliente() {
         return cliente;
     }
 
-    public void setCliente(Cliente cliente) {
+    public void setCliente(Persona cliente) {
         this.cliente = cliente;
     }
 
@@ -62,5 +62,8 @@ public class CuentaCorriente {
         this.fecha = fecha;
     }
     
-    
+    @Override
+    public int hashCode(){
+        return this.id;
+    }
 }

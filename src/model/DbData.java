@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -42,7 +43,7 @@ public class DbData <T> {
         List<String> lines = new ArrayList<>();
         Gson gson = new Gson();
         if(file.exists()){
-            Scanner s = new Scanner(file);
+            Scanner s = new Scanner(file); 
             while(s.hasNextLine()){
                 lines.add(s.nextLine());
             }
@@ -56,6 +57,18 @@ public class DbData <T> {
         fileWriter.close();
     }
     
+    public void addAll(List<T> list) throws FileNotFoundException, IOException{
+        File file = new File(this.ruta);
+        Gson gson = new Gson();
+       
+        FileWriter fileWriter = new FileWriter(file);
+        for(T line: list){
+            fileWriter.write(gson.toJson(line)+ System.getProperty("line.separator"));
+        }
+        fileWriter.flush();
+        fileWriter.close();
+    }
+    
     /**
      * Devuelve una lista con el conjunto de datos almacenados en el archivo
      * seleccionado 
@@ -64,7 +77,7 @@ public class DbData <T> {
      */
     public List<T> getAll() throws FileNotFoundException{
         File file = new File(this.ruta);
-        List<T> generic = new ArrayList<>();
+        ArrayList<T> generic = new ArrayList<>();
         Gson gson = new Gson();
         if(file.exists()){
             Scanner s = new Scanner(file);
@@ -73,5 +86,25 @@ public class DbData <T> {
             }
         }
         return generic;
+    }
+    
+    public T find(int id) throws FileNotFoundException{
+        return getAll().stream().filter(x -> id == x.hashCode()).findFirst().get();
+    }
+    
+    public void update(T t) throws FileNotFoundException, IOException{
+        List<T> generic = getAll().stream()
+                .filter(x -> t.hashCode() != x.hashCode())
+                .collect(Collectors.toCollection(() -> new ArrayList<T>()));
+        
+        generic.add(t);
+        addAll(generic);
+    }
+    
+    public void delete(T t) throws FileNotFoundException, IOException{
+        List<T> generic = getAll().stream()
+                .filter(x -> t.hashCode() != x.hashCode())
+                .collect(Collectors.toCollection(()-> new ArrayList<T>()));
+        addAll(generic);
     }
 }
