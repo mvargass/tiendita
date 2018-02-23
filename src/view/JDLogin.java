@@ -115,7 +115,7 @@ public class JDLogin extends javax.swing.JDialog {
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         // TODO add your handling code here:
-        if(txtUsuario.getText().equals("Administrador") && txtContraseña.getText().equals("12345")){
+        if(txtUsuario.getText().equals("Admin") && txtContraseña.getText().equals("12345")){
             this.dispose();
             JOptionPane.showMessageDialog(null, "Bienvenido\n Has ingresado "
                     +"exitosamente al Sistema", "Mensaje de Bienvenida",

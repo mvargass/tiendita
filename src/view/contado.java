@@ -1,6 +1,14 @@
 package view;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import model.DbData;
+import model.Documento;
+import model.TipoPago;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,12 +22,19 @@ import java.util.ArrayList;
  */
 public class contado extends javax.swing.JFrame {
 
+    private List<Documento> lista;
+    private DbData<Documento> controller;
     /**
      * Creates new form contado
      */
-    ArrayList<Persona2> lista = new ArrayList<Persona2>();
     public contado() {
         initComponents();
+        controller = new DbData(Documento.class, "documento.txt");
+        try {
+            lista = controller.getAll();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(contado.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -51,13 +66,13 @@ public class contado extends javax.swing.JFrame {
 
         Ingresos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Numero", "Nombre Cliente", "Total ", "Fecha y Hora"
+                "Numero", "Nombre Cliente", "Tipo de Pago", "Total ", "Fecha y Hora"
             }
         ));
         jScrollPane1.setViewportView(Ingresos);
@@ -112,26 +127,29 @@ public class contado extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-         Persona2 persona = new Persona2("1", "Vargas","100","15/02/2018");
-        lista.add(persona);
-        mostrar();
+         List<Documento> documentoContado = lista.stream()
+                 .filter(x -> x.getTipoPago().get(0) != TipoPago.CxC)
+                 .collect(Collectors.toCollection(()-> new ArrayList<>()));
+         documentoContado.sort((d1,d2)-> d1.getTipoPago().get(0).compareTo(d2.getTipoPago().get(0)));
+        mostrar(documentoContado);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     
-    public void mostrar(){
-        String matris[][]=new String[lista.size()][4];
-        for (int i=0; i <lista.size(); i++){
-            matris[i][0]=lista.get(i).getNumero();
-            matris[i][1]=lista.get(i).getNombre();
-            matris[i][2]=lista.get(i).getTotal();
-            matris[i][3]=lista.get(i).getFecha();
+    public void mostrar(List<Documento> documentolist){
+        String matris[][]=new String[documentolist.size()][5];
+        for (int i=0; i < documentolist.size(); i++){
+            matris[i][0] = String.valueOf(documentolist.get(i).getId());
+            matris[i][1] = documentolist.get(i).getCliente().getNombre();
+            matris[i][2] = documentolist.get(i).getTipoPago().get(0).name();
+            matris[i][3] = String.valueOf(documentolist.get(i).getTotalDocumento());
+            matris[i][4] = documentolist.get(i).getFecha().toString();
             
         }
         
           Ingresos.setModel(new javax.swing.table.DefaultTableModel(
             matris,
             new String [] {
-                "Numero", "Nombre Cliente", "Total ", "Fecha y Hora"
+                "Numero", "Nombre Cliente","Tipo de Pago", "Total ", "Fecha y Hora"
             }
         ));
     }

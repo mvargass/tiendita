@@ -1,5 +1,22 @@
 package view;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import model.CuentaCorriente;
+import model.DbData;
+import model.Detalle;
+import model.Documento;
+import model.Producto;
+import model.TipoPago;
+import model.TipoTransaccion;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,12 +28,45 @@ package view;
  * @author Erick
  */
 public class PagoCredito extends javax.swing.JFrame {
-
+    private Documento documento;  
+    private Producto producto;
+    private final DbData<Documento> documentoController;
+    private final DbData<Detalle> detalleController;
+    private final DbData<CuentaCorriente> creditoController;
     /**
      * Creates new form PagoCredito
      */
     public PagoCredito() {
         initComponents();
+        documentoController = new DbData(Documento.class, "documento.txt");
+        detalleController = new DbData(Detalle.class, "detalle.txt");
+        creditoController = new DbData(CuentaCorriente.class, "credito.txt");
+        producto = new Producto();
+        producto.setCodigo("P0001");
+        producto.setDescripcion("Helado");
+        producto.setPrecio(5.00);
+        producto.setId(1);
+        producto.setStock(100);
+    }
+    
+    /**
+     * Creates new form PagoCredito
+     * @param documento documento
+     */
+    public PagoCredito(Documento documento){
+        initComponents();
+        this.documento = documento;
+        txtCodigoCliente.setText(documento.getCliente().getCodigoCliente());
+        LblNombre.setText(documento.getCliente().getNombre());
+        documentoController = new DbData(Documento.class, "documento.txt");
+        detalleController = new DbData(Detalle.class, "detalle.txt");
+        creditoController = new DbData(CuentaCorriente.class, "credito.txt");
+        producto = new Producto();
+        producto.setCodigo("P0001");
+        producto.setDescripcion("Helado");
+        producto.setPrecio(5.00);
+        producto.setId(1);
+        producto.setStock(100);
     }
 
     PagoCredito(String toString) {
@@ -59,6 +109,8 @@ public class PagoCredito extends javax.swing.JFrame {
         jLabel3.setText("Codigo Cliente:");
 
         jLabel4.setText("No. Nota de Credito:");
+
+        txtCodigoCliente.setEditable(false);
 
         LblMonto.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         LblMonto.setForeground(new java.awt.Color(51, 0, 204));
@@ -164,7 +216,55 @@ public class PagoCredito extends javax.swing.JFrame {
     }//GEN-LAST:event_RegresarActionPerformed
 
     private void SolicitudCreditoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SolicitudCreditoActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            int idDocumento, idDetalle, idCredito;
+            Calendar c = Calendar.getInstance();
+            List<Documento> d = documentoController.getAll();
+            List<TipoPago> pago = new ArrayList();
+            CuentaCorriente cuentaCorriente = new CuentaCorriente();
+            List<CuentaCorriente> cuentaList = creditoController.getAll();
+            pago.add(TipoPago.CxC);
+            List<Detalle> detalleList = detalleController.getAll();
+            d.sort((d1,d2)-> d2.getId()-d1.getId());
+            detalleList.sort((det1, det2)-> det2.getId()-det1.getId());
+            cuentaList.sort((cuenta1, cuenta2)-> cuenta2.getId()-cuenta1.getId());
+            if(detalleList.isEmpty()) idDetalle = 1;
+            else idDetalle = detalleList.get(0).getId()+1;
+
+            if(d.isEmpty()) idDocumento = 1;
+            else idDocumento = d.get(0).getId()+1;
+            if(cuentaList.isEmpty()) idCredito = 1;
+            else idCredito = cuentaList.get(0).getId() + 1;
+            
+            cuentaCorriente.setId(idCredito);
+            cuentaCorriente.setCargo(documento.getTotalDocumento());
+            cuentaCorriente.setAbono(0.00);
+            cuentaCorriente.setCliente(documento.getCliente());
+            cuentaCorriente.setDocumento(documento);
+            cuentaCorriente.setFecha(c.getTime());
+            
+            documento.setId(idDocumento);
+            documento.setTipoPago(pago);
+            documento.setDocumento(txtNumeroCredito.getText());
+            Detalle transaccion = new Detalle();
+            transaccion.setId(idDetalle);
+            transaccion.setDocumento(documento);
+            transaccion.setTipoTransaccion(TipoTransaccion.VENTA);
+            transaccion.setTotal(documento.getTotalDocumento());
+            transaccion.setProducto(producto);
+
+            documentoController.add(documento);
+            detalleController.add(transaccion);
+            JOptionPane.showMessageDialog(null, "Transaccion realizada con exito"
+            ,"Operacion Exitosa", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+            creditoController.add(cuentaCorriente);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PagoCredito.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(PagoCredito.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_SolicitudCreditoActionPerformed
 
     /**

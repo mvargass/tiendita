@@ -3,14 +3,14 @@ package view;
 
 import java.io.FileNotFoundException;
 import java.util.Calendar;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static javafx.application.Platform.exit;
 import javax.swing.JOptionPane;
 import model.Cliente;
 import model.DbData;
 import model.Documento;
+import utils.Utils;
+import utils.realizarreportes.GestorVenta;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -62,8 +62,10 @@ public class Index extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        Rcontado = new javax.swing.JMenuItem();
+        Rcredito = new javax.swing.JMenuItem();
+        Rtarjeta = new javax.swing.JMenuItem();
+        RCheque = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
 
@@ -95,7 +97,7 @@ public class Index extends javax.swing.JFrame {
 
         jLabel5.setText("Codigo de Cliente:");
 
-        FormaPago.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Contado", "Credito", " " }));
+        FormaPago.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Contado", "Credito", "Tarjeta Credito", "Cheque" }));
 
         Aceptar.setText("Aceptar");
         Aceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -132,21 +134,37 @@ public class Index extends javax.swing.JFrame {
 
         jMenu2.setText("Reportes");
 
-        jMenuItem2.setText("Contado");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        Rcontado.setText("Contado");
+        Rcontado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                RcontadoActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        jMenu2.add(Rcontado);
 
-        jMenuItem3.setText("Credito");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        Rcredito.setText("Credito");
+        Rcredito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                RcreditoActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem3);
+        jMenu2.add(Rcredito);
+
+        Rtarjeta.setText("Tarjeta");
+        Rtarjeta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RtarjetaActionPerformed(evt);
+            }
+        });
+        jMenu2.add(Rtarjeta);
+
+        RCheque.setText("Cheque");
+        RCheque.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RChequeActionPerformed(evt);
+            }
+        });
+        jMenu2.add(RCheque);
 
         jMenuBar1.add(jMenu2);
 
@@ -275,21 +293,9 @@ public class Index extends javax.swing.JFrame {
         
     }//GEN-LAST:event_cantidadStateChanged
 
-    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
-       
-    }//GEN-LAST:event_jMenu1ActionPerformed
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
-        new JDLogin(this, true).setVisible(true);    
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
     private void AceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AceptarActionPerformed
         // TODO add your handling code here:
-      
-        if(cliente != null && Integer.parseInt(cantidad.getValue().toString())>0){
-       
+        if(cliente!=null  && Integer.parseInt(cantidad.getValue().toString())>0){
             Documento documento = new Documento();
             Calendar c = Calendar.getInstance();
             documento.setCliente(cliente);
@@ -297,52 +303,101 @@ public class Index extends javax.swing.JFrame {
             documento.setSerie("A");
             documento.setTotalDocumento(Monto);
             if("Contado".equals(FormaPago.getSelectedItem().toString())){
-                PagoContado iniciar = new PagoContado(documento);
-                iniciar.LblMonto.setText(Integer.toString(Monto));
+                 PagoContado iniciar = new PagoContado(documento);
+                 iniciar.LblMonto.setText(Integer.toString(Monto));
+                iniciar.setVisible(true);
+            }else if("Tarjeta Credito".equals(FormaPago.getSelectedItem().toString())){
+                PagoTarjeta iniciar = new PagoTarjeta(documento);
+                iniciar.lblMonto.setText(Integer.toString(Monto));
+                iniciar.setVisible(true);
+            }else if("Cheque".equals(FormaPago.getSelectedItem().toString())){
+                PagoCheque iniciar = new PagoCheque(documento);
+                iniciar.lblMonto.setText(Integer.toString(Monto));
                 iniciar.setVisible(true);
             }else{
-                PagoCredito iniciar = new PagoCredito();
+                PagoCredito iniciar = new PagoCredito(documento);
                 iniciar.LblMonto.setText(Integer.toString(Monto));
-                iniciar.LblNombre.setText(txtNombre.getText());
+                     //iniciar..setText(txtCodigoCliente.getText());
                 iniciar.setVisible(true);
             }
         }else{
-         JOptionPane.showMessageDialog(null,"Dato Incorrecto \n"
-            +"porfavor ingrese un dato Correcto",
+            JOptionPane.showMessageDialog(null,"Dato Incorrecto \n"
+                    +"porfavor ingrese un dato Correcto",
                     "Dato Incorrecto", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_AceptarActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
-        contado reportar = new contado();
-        reportar.setVisible(true);
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
-        Credito reportar = new Credito();
-        reportar.setVisible(true);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
-
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        // TODO add your handling code here:
-        corteCaja finalizar = new corteCaja();
-        finalizar.setVisible(true);
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            List<Cliente> clients = clienteController.getAll();
-            cliente = clients.stream()
-                    .filter(x -> x.getCodigoCliente().toLowerCase().equals(txtNombre.getText().toLowerCase()))
-                    .findFirst().get();
+            cliente = Utils.findCliente(txtNombre.getText().toLowerCase());
             if(cliente != null)
                lblNombre.setText(cliente.getNombre());
+            else{
+                int op=JOptionPane.showOptionDialog(null, //Component parentComponent
+                               "No se encontro ningun cliente con este codigo, Desea crearlo?", //Object message,
+                               "Dato no encontrado", //String title
+                               JOptionPane.YES_NO_OPTION, //int optionType
+                               JOptionPane.INFORMATION_MESSAGE, //int messageType
+                               null, //Icon icon,
+                               new String[]{"Si","No"}, //Object[] options,
+                               "Si");//Object initialValue 
+                if(op==0){
+                    CrearCliente frmCliente = new CrearCliente();
+                    frmCliente.setVisible(true);
+                    frmCliente.lblCodigo.setText(txtNombre.getText());
+                }
+            }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        new JDLogin(this, true).setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+
+    }//GEN-LAST:event_jMenu1ActionPerformed
+
+    private void RcontadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RcontadoActionPerformed
+        // TODO add your handling code here:
+        ReporteContado reportar = new ReporteContado();
+        reportar.setVisible(true);
+    }//GEN-LAST:event_RcontadoActionPerformed
+
+    private void RcreditoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RcreditoActionPerformed
+        // TODO add your handling code here:
+        ReporteCredito reportar = new ReporteCredito();
+        reportar.setVisible(true);
+    }//GEN-LAST:event_RcreditoActionPerformed
+
+    private void RtarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RtarjetaActionPerformed
+        // TODO add your handling code here:
+        ReporteTarjeta reportar = new ReporteTarjeta();
+        reportar.setVisible(true);
+    }//GEN-LAST:event_RtarjetaActionPerformed
+
+    private void RChequeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RChequeActionPerformed
+        // TODO add your handling code here:
+        ReporteCheques reportar = new ReporteCheques();
+        reportar.setVisible(true);
+    }//GEN-LAST:event_RChequeActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        GestorVenta v = new GestorVenta();
+      
+        try {
+            v.generar_reporte();//PRUEBA DE GENERADOR DE REPORTES DE VENTAS
+            JOptionPane.showMessageDialog(null,"Reporte generado exitosamente",
+                    "Resultado Exitoso", JOptionPane.INFORMATION_MESSAGE);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -385,6 +440,10 @@ public class Index extends javax.swing.JFrame {
     private javax.swing.JLabel LblCantidad;
     private javax.swing.JLabel LblPrecio;
     private javax.swing.JLabel LblTotal;
+    private javax.swing.JMenuItem RCheque;
+    private javax.swing.JMenuItem Rcontado;
+    private javax.swing.JMenuItem Rcredito;
+    private javax.swing.JMenuItem Rtarjeta;
     private javax.swing.JSpinner cantidad;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -398,8 +457,6 @@ public class Index extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JTextField txtNombre;

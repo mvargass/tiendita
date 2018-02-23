@@ -8,7 +8,7 @@ import java.util.Date;
  */
 public class CuentaCorriente {
     private int id;
-    private Persona cliente;
+    private Cliente cliente;
     private Documento Documento;
     private double cargo;
     private double abono;
@@ -22,11 +22,11 @@ public class CuentaCorriente {
         this.id = id;
     }
 
-    public Persona getCliente() {
+    public Cliente getCliente() {
         return cliente;
     }
 
-    public void setCliente(Persona cliente) {
+    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 

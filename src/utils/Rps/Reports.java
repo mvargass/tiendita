@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -24,33 +25,32 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import utils.realizarreportes.Venta;
-import java.util.ArrayList;
 import java.util.Random;
 
 /* PARTE DE GUILLERMO MARROQUIN PARA GENERAR REPORTE DE VENTA EN EXCEL GRUPO 1*/
 
 import java.util.Date;
-import model.Cliente;
+import java.util.List;
+import model.Documento;
 public class Reports {
 
     
-    
-    public void generar_( ArrayList<Venta> ge, ArrayList<Cliente> cl){      
-    generar_reportes(ge, cl);
+    public void generar_(List<Documento> ge){      
+        generar_reportes(ge);
     }
     
     
-    public static void generar_reportes(ArrayList<Venta> ge, ArrayList<Cliente> cl){
+    public static void generar_reportes(List<Documento> ge){
         Random r = new Random();
         Date mes = new Date();
         Workbook book = new XSSFWorkbook();
         Double cantidadtotal;
+        SimpleDateFormat dt = new SimpleDateFormat("dd-mm-yyyy");
         int a;
         
         Sheet sheet = book.createSheet("Productos");
             try{
-                InputStream is = new FileInputStream("src\\imagenes\\icono.png");
+                InputStream is = new FileInputStream("src\\utils\\imagenes\\icono.png");
                 byte[] bytes = IOUtils.toByteArray(is);
                 int imgIndex = book.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
                 is.close();
@@ -168,28 +168,28 @@ public class Reports {
                     Cell fecha = folaDatos.createCell(7);
                 
                     numero.setCellStyle(datos);//VENTA
-                    numero.setCellValue(ge.get(i).getNumero());//VENTA
+                    numero.setCellValue(ge.get(i).getId());//VENTA
                     
                     id.setCellStyle(datos);//CLIENTE
-                    id.setCellValue(cl.get(i).getId());//CLIENTE
+                    id.setCellValue(ge.get(i).getCliente().getId());//CLIENTE
 
                     codigo.setCellStyle(datos);//CLIENTE
-                    codigo.setCellValue(cl.get(i).getCodigoCliente());//CLIENTE
+                    codigo.setCellValue(ge.get(i).getCliente().getCodigoCliente());//CLIENTE
 
                     nit.setCellStyle(datos);//CLIENTE 
-                    nit.setCellValue(cl.get(i).getNit());//CLIENTE
+                    nit.setCellValue(ge.get(i).getCliente().getNit());//CLIENTE
                     
                     nombre.setCellStyle(datos);//CLIENTE
-                    nombre.setCellValue(cl.get(i).getNombre());//CLIENTE
+                    nombre.setCellValue(ge.get(i).getCliente().getNombre());//CLIENTE
 
                     serie.setCellStyle(datos);//VENTA
                     serie.setCellValue(ge.get(i).getSerie());//VENTA
                     
                     total.setCellStyle(datos);//VENTA
-                    total.setCellValue(ge.get(i).getTotal());//VENTA
-                    cantidadtotal = cantidadtotal + ge.get(i).getTotal(); 
+                    total.setCellValue(ge.get(i).getTotalDocumento());//VENTA
+                    cantidadtotal = cantidadtotal + ge.get(i).getTotalDocumento(); 
                     fecha.setCellStyle(datos);//VENTA
-                    fecha.setCellValue((ge.get(i).getFecha().toString()));//VENTA
+                    fecha.setCellValue(dt.format(ge.get(i).getFecha()));//VENTA
                     filaDatos = filaDatos+1;
 
                 }

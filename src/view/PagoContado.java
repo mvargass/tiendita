@@ -2,6 +2,7 @@ package view;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,6 +11,7 @@ import model.DbData;
 import model.Detalle;
 import model.Documento;
 import model.Producto;
+import model.TipoPago;
 import model.TipoTransaccion;
 
 /*
@@ -200,6 +202,8 @@ public class PagoContado extends javax.swing.JFrame {
             }else{
                try {
                    int idDocumento, idDetalle;
+                   List<TipoPago> pago = new ArrayList();
+                   pago.add(TipoPago.EFECTIVO);
                    List<Documento> d = documentoController.getAll();
                    List<Detalle> detalleList = detalleController.getAll();
                    d.sort((d1,d2)-> d2.getId()-d1.getId());
@@ -212,6 +216,7 @@ public class PagoContado extends javax.swing.JFrame {
                    else idDocumento = d.get(0).getId()+1;
                    
                    documento.setId(idDocumento);
+                   documento.setTipoPago(pago);
                    Detalle transaccion = new Detalle();
                    transaccion.setId(idDetalle);
                    transaccion.setDocumento(documento);
@@ -220,6 +225,9 @@ public class PagoContado extends javax.swing.JFrame {
                    transaccion.setProducto(producto);
                    documentoController.add(documento);
                    detalleController.add(transaccion);
+                   JOptionPane.showMessageDialog(null, "Transaccion realizada con exito"
+                   ,"Operacion Exitosa", JOptionPane.INFORMATION_MESSAGE);
+                   this.dispose();
                } catch (FileNotFoundException ex) {
                    Logger.getLogger(PagoContado.class.getName()).log(Level.SEVERE, null, ex);
                } catch (IOException ex) {
