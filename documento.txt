@@ -1,0 +1,10 @@
+{"numero":1,"cliente":{"codigoCliente":"C0002","id":2,"nombre":"Mario Vargas","nit":"9347166-7","tipoRelacion":"CLIENTE"},"serie":"A","total":10.0,"fecha":"Feb 21, 2018 8:25:41 PM","tipoPago":["EFECTIVO"]}
+{"numero":2,"cliente":{"codigoCliente":"C0002","id":2,"nombre":"Mario Vargas","nit":"9347166-7","tipoRelacion":"CLIENTE"},"serie":"A","total":10.0,"fecha":"Feb 21, 2018 8:26:05 PM","tipoPago":["CHEQUE"]}
+{"numero":3,"cliente":{"codigoCliente":"C0003","id":3,"nombre":"Mario Roberto Vargas Solares","nit":"9348166-7"},"serie":"A","total":10.0,"fecha":"Feb 21, 2018 9:43:44 PM","tipoPago":["EFECTIVO"]}
+{"numero":4,"cliente":{"codigoCliente":"C0003","id":3,"nombre":"Mario Roberto Vargas Solares","nit":"9348166-7"},"serie":"A","total":15.0,"fecha":"Feb 21, 2018 10:28:59 PM","tipoPago":["CxC"],"documento relacionado":"1234"}
+{"numero":5,"cliente":{"codigoCliente":"C0002","id":2,"nombre":"Mario Vargas","nit":"9347166-7","tipoRelacion":"CLIENTE"},"serie":"A","total":15.0,"fecha":"Feb 21, 2018 11:12:52 PM","tipoPago":["TARJETA"]}
+{"numero":6,"cliente":{"codigoCliente":"C0003","id":3,"nombre":"Mario Roberto Vargas Solares","nit":"9348166-7"},"serie":"A","total":15.0,"fecha":"Feb 22, 2018 7:59:02 PM","tipoPago":["CxC"],"documento relacionado":"123456"}
+{"numero":7,"cliente":{"codigoCliente":"C0002","id":2,"nombre":"Mario Vargas","nit":"9347166-7","tipoRelacion":"CLIENTE"},"serie":"A","total":10.0,"fecha":"Feb 22, 2018 7:59:21 PM","tipoPago":["CxC"],"documento relacionado":"223344"}
+{"numero":8,"cliente":{"codigoCliente":"C0002","id":2,"nombre":"Mario Vargas","nit":"9347166-7","tipoRelacion":"CLIENTE"},"serie":"A","total":15.0,"fecha":"Feb 22, 2018 10:12:05 PM","tipoPago":["EFECTIVO"]}
+{"numero":9,"cliente":{"codigoCliente":"C0002","id":2,"nombre":"Mario Vargas","nit":"9347166-7","tipoRelacion":"CLIENTE"},"serie":"A","total":20.0,"fecha":"Feb 22, 2018 10:12:18 PM","tipoPago":["TARJETA"]}
+{"numero":10,"cliente":{"codigoCliente":"C0003","id":3,"nombre":"Mario Roberto Vargas Solares","nit":"9348166-7"},"serie":"A","total":25.0,"fecha":"Feb 22, 2018 10:12:56 PM","tipoPago":["CHEQUE"],"documento relacionado":"25"}

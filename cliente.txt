@@ -1,0 +1,3 @@
+{"codigoCliente":"C0001","id":1,"nombre":"Cliente Prueba","nit":"9347166-7","tipoRelacion":"CLIENTE"}
+{"codigoCliente":"C0002","id":2,"nombre":"Mario Vargas","nit":"9347166-7","tipoRelacion":"CLIENTE"}
+{"codigoCliente":"C0003","id":3,"nombre":"Mario Roberto Vargas Solares","nit":"9348166-7"}
