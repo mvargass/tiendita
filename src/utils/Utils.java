@@ -19,7 +19,7 @@ public class Utils {
     
     public static Cliente findCliente(String codigo) throws FileNotFoundException, NoSuchElementException{
         DbData<Cliente> clienteController=new DbData(Cliente.class, "cliente.txt");
-        List<Cliente> clients = clienteController.getAll();
+        List<Cliente> clients = clienteController.getAll(); 
         boolean exist = clients.stream()
                 .filter(x -> x.getCodigoCliente().toLowerCase().equals(codigo.toLowerCase()))
                 .findFirst().isPresent();
